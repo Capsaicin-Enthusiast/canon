@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-post-create',
   templateUrl: './post-create.component.html',
   styleUrl: './post-create.component.css',
-  standalone: true,
   imports: [FormsModule]
 })
 export class PostCreateComponent {
