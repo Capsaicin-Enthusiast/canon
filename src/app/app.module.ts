@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @NgModule({
     declarations: [
@@ -13,7 +14,8 @@ import { MatButtonModule } from '@angular/material/button';
         FormsModule,
         MatCardModule,
         MatInputModule,
-        MatButtonModule
+        MatButtonModule,
+        MatToolbarModule
     ],
     providers: []
 })
