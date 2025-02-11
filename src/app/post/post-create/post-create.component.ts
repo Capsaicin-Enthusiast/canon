@@ -13,15 +13,17 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class PostCreateComponent {
   @Output() postCreated = new EventEmitter<{ title: string, content: string }>();
-  PostInput = '';
+  PostTitle = '';
+  PostContent = '';
 
   onAddPost() {
     const post = {
-      title: 'New Post',
-      content: this.PostInput
+      title: this.PostTitle,
+      content: this.PostContent
     };
     this.postCreated.emit(post);
-    this.PostInput = '';
+    this.PostTitle = '';
+    this.PostContent = '';
   }
 }
 
