@@ -21,27 +21,4 @@
       <button mat-raised-button color="primary" type="submit">Save</button>
     </form>
   </mat-card>
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>Create Post</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <mat-form-field appearance="fill">
-      <mat-label>Post Content</mat-label>
-      <textarea matInput [(ngModel)]="PostInput"></textarea>
-    </mat-form-field>
-  </mat-card-content>
-  <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="onAddPost()">Save</button>
-  </mat-card-actions>
-</mat-card>
-<hr>
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>Preview</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <p>{{ NewPost }}</p>
-  </mat-card-content>
-</mat-card>
 </div>
