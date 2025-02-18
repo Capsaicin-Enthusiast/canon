@@ -11,10 +11,11 @@ import { PostListComponent } from './post/post-list/post-list.component';
   imports: [PostCreateComponent, HeaderComponent, PostListComponent]
 })
 export class AppComponent {
-  title = 'test';
-  storedPosts: { title: string, content: string }[] = [];
+  title = 'it_elec_6a';
+
+  /* storedPosts: { title: string, content: string }[] = [];
 
   onPostAdded(post: { title: string, content: string }) {
     this.storedPosts = [...this.storedPosts, post];
-  }
+  } */
 }

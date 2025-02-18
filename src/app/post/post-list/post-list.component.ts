@@ -1,4 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { Post } from '../post.model';
+import { PostsService } from '../posts.service';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -10,6 +13,25 @@ import { MatExpansionModule } from '@angular/material/expansion';
   standalone: true,
   imports: [MatCardModule, CommonModule, MatExpansionModule]
 })
-export class PostListComponent {
-  @Input() posts: { title: string, content: string }[] = [];
+export class PostListComponent implements OnInit, OnDestroy {
+
+  posts: Post[] = [];
+  private postsSub!: Subscription;
+
+  constructor(public postsService: PostsService) {
+  }
+
+  ngOnInit() {
+    this.posts = this.postsService.getPosts();
+    this.postsSub = this.postsService.getPostUpdatedListener()
+      .subscribe((posts: Post[]) => {
+        this.posts = posts;
+      });
+  }
+
+  ngOnDestroy() {
+    this.postsSub.unsubscribe();
+  }
+
+  //@Input() posts: { title: string, content: string }[] = [];
 }
