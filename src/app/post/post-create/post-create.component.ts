@@ -24,6 +24,7 @@ export class PostCreateComponent {
     }
     this.postsService.addPost(form.value.title,
       form.value.content);
+    form.resetForm();
   };
 
   /* @Output() postCreated = new EventEmitter<{ title: string, content: string }>();
