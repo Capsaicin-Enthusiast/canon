@@ -8,17 +8,17 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
-    declarations: [
-    ],
-    imports: [
-        BrowserModule,
-        FormsModule,
-        MatCardModule,
-        MatInputModule,
-        MatButtonModule,
-        MatToolbarModule,
-        MatExpansionModule
-    ],
-    providers: []
+  declarations: [
+  ],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    MatCardModule,
+    MatInputModule,
+    MatButtonModule,
+    MatToolbarModule,
+    MatExpansionModule
+  ],
+  providers: []
 })
 export class AppModule { }
