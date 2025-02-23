@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
   selector: 'app-post-create',
   templateUrl: './post-create.component.html',
   styleUrls: ['./post-create.component.css'],
+  standalone: true,
   imports: [CommonModule, FormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule]
 })
 export class PostCreateComponent {
