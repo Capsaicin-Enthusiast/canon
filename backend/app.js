@@ -41,6 +41,8 @@ app.get("/api/posts", (req, res, next) => {
 
 app.post("/api/posts", (req, res, next) => {
   const post = req.body;
+  post.id = Math.random().toString(36).substring(7);
+  posts.push(post);
   console.log(post);
   res.status(201).json({
     message: "Post added successfully!",
