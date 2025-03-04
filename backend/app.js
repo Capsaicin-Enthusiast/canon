@@ -1,13 +1,14 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const { default: mongoose } = require("mongoose");
+const mongoose = require("mongoose");
+const Post = require("./model/post");
 
 const app = express();
 
 mongoose
   .connect(
-    "mongodb+srv://root:<root>@cluster0.n08wv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+    "mongodb+srv://root:root@cluster0.tdbi4.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
   )
   .then(() => {
     console.log("Connected to database!");
@@ -52,13 +53,14 @@ app.get("/api/posts", (req, res, next) => {
 });
 
 app.post("/api/posts", (req, res, next) => {
-  const post = req.body;
-  post.id = Math.random().toString(36).substring(7);
-  posts.push(post);
-  console.log(post);
-  res.status(201).json({
-    message: "Post added successfully!",
-    postId: post.id,
+  const post = new Post({
+    title: req.body.title,
+    content: req.body.content,
+  });
+  post.save().then((createdPost) => {
+    res.status(201).json({
+      message: "Post added successfully!",
+    });
   });
 });
 
