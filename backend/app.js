@@ -27,23 +27,7 @@ app.use(
   })
 );
 
-let posts = [
-  {
-    id: "sdadadasda",
-    title: "1st server-side post",
-    content: "1st content from server-side",
-  },
-  {
-    id: "fgdfsfdfs",
-    title: "2nd server-side post",
-    content: "2nd content from server-side",
-  },
-  {
-    id: "dfsdfgfghg",
-    title: "3rd server-side post",
-    content: "3rd content from server-side",
-  },
-];
+let posts = [];
 
 app.get("/api/posts", (req, res, next) => {
   res.status(200).json({
@@ -71,10 +55,20 @@ app.put("/api/posts/:id", (req, res, next) => {
   res.status(200).json({ message: "Post updated successfully!" });
 });
 
+app.get("/api/posts", (req, res, next) => {
+  posts.find().then((documents) => {
+    res.status(200).json({
+      message: "Posts fetched successfully!",
+      posts: documents,
+    });
+  });
+});
+
 app.delete("/api/posts/:id", (req, res, next) => {
-  const postId = req.params.id;
-  posts = posts.filter((post) => post.id !== postId);
-  res.status(200).json({ message: "Post deleted successfully!" });
+  Post.deleteOne({ _id: req.params.id }).then((result) => {
+    console.log(result);
+    res.status(200).json({ message: "Post deleted!" });
+  });
 });
 
 module.exports = app;
