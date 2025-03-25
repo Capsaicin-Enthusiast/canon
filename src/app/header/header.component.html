@@ -1,3 +1,13 @@
 <mat-toolbar color="primary">
-  <span>My Application</span>
+  <span class="app-title">
+    <a routerLink="/" class="app-link">
+      Message
+    </a>
+  </span>
+  <span class="spacer"></span>
+  <ul class="nav-list">
+    <li class="nav-item">
+      <a mat-button routerLink="/create" routerLinkActive = "mat-accent"> New Post</a>
+    </li>
+  </ul>
 </mat-toolbar>

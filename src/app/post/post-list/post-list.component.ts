@@ -1,22 +1,23 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Post } from '../post.model';
 import { PostsService } from '../posts.service';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'post-list',
+  selector: 'app-post-list',
   templateUrl: './post-list.component.html',
   styleUrls: ['./post-list.component.css'],
   standalone: true,
-  imports: [MatCardModule, CommonModule, MatExpansionModule]
+  imports: [MatCardModule, CommonModule, MatExpansionModule, RouterModule]
 })
 export class PostListComponent implements OnInit, OnDestroy {
 
   posts: Post[] = [];
-  private postsSub!: Subscription;
+  private postsSub: Subscription = new Subscription();
 
   constructor(public postsService: PostsService) {
   }
