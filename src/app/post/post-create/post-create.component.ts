@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Post } from '../post.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-post-create',
@@ -20,7 +21,7 @@ export class PostCreateComponent implements OnInit {
   enteredTitle = "";
   enteredContent = "";
 
-  constructor(public postsService: PostsService, public route: ActivatedRoute) {
+  constructor(public postsService: PostsService, public route: ActivatedRoute, private router: Router) {
   }
 
   private mode = 'create';
@@ -56,6 +57,7 @@ export class PostCreateComponent implements OnInit {
       );
     }
     form.resetForm();
+    this.router.navigate(['/']);
   };
 }
 
