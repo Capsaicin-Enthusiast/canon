@@ -6,25 +6,29 @@ import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { RouterModule } from '@angular/router';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-post-list',
   templateUrl: './post-list.component.html',
   styleUrls: ['./post-list.component.css'],
   standalone: true,
-  imports: [MatCardModule, CommonModule, MatExpansionModule, RouterModule]
+  imports: [MatCardModule, CommonModule, MatExpansionModule, RouterModule, MatProgressSpinnerModule]
 })
 export class PostListComponent implements OnInit, OnDestroy {
 
   posts: Post[] = [];
+  loading = false;
   private postsSub: Subscription = new Subscription();
 
   constructor(public postsService: PostsService) {
   }
 
   ngOnInit() {
+    this.loading = true;
     this.postsSub = this.postsService.getPostUpdatedListener()
       .subscribe((posts: Post[]) => {
+        this.loading = false;
         this.posts = posts;
       });
     this.postsService.getPosts();
