@@ -2,7 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const Post = require("./model/post");
+const postroutes = require("./routes/posts");
+const Post = require("./models/post");
 
 const app = express();
 
@@ -92,5 +93,7 @@ app.delete("/api/posts/:id", (req, res, next) => {
     res.status(200).json({ message: "Post deleted!" });
   });
 });
+
+app.use("/api/posts", postroutes);
 
 module.exports = app;

@@ -9,17 +9,20 @@ import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Post } from '../post.model';
 import { Router } from '@angular/router';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { NgModule } from '@angular/core';
 
 @Component({
   selector: 'app-post-create',
   templateUrl: './post-create.component.html',
   styleUrls: ['./post-create.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule]
+  imports: [CommonModule, FormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatProgressSpinnerModule]
 })
 export class PostCreateComponent implements OnInit {
   enteredTitle = "";
   enteredContent = "";
+  isLoading = false;
 
   constructor(public postsService: PostsService, public route: ActivatedRoute, private router: Router) {
   }
@@ -47,6 +50,7 @@ export class PostCreateComponent implements OnInit {
     if (form.invalid) {
       return;
     }
+    this.isLoading = true;
     if (this.mode === "create") {
       this.postsService.addPost(form.value.title, form.value.content);
     } else {
@@ -60,4 +64,9 @@ export class PostCreateComponent implements OnInit {
     this.router.navigate(['/']);
   };
 }
+
+@NgModule({
+  imports: [MatProgressSpinnerModule],
+})
+export class PostCreateModule { }
 
