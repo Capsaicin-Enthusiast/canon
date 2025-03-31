@@ -18,8 +18,8 @@
         <input type="file" #filepicker formControlName="image" (change)="PickedImage($event)">
       </div>
 
-      <div class="image-preview">
-        <img *ngIf="imagePreview" [src]="imagePreview" [alt]="form.value.title" />
+      <div class="image-preview" *ngIf="Pickedimage && Pickedimage !== ''">
+        <img [src]="Pickedimage" [alt]="form.value.title" />
       </div>
 
       <mat-form-field>

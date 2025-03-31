@@ -22,7 +22,7 @@ import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angula
 export class PostCreateComponent implements OnInit {
   form!: FormGroup;
   loading = false;
-  imagePreview: string | null = null; // Add property to store image preview URL
+  Pickedimage: string | null = null;
 
   constructor(public postsService: PostsService, public route: ActivatedRoute, private router: Router) { }
 
@@ -84,7 +84,7 @@ export class PostCreateComponent implements OnInit {
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        this.imagePreview = reader.result as string;
+        this.Pickedimage = reader.result as string;
       };
       reader.readAsDataURL(file);
     }
