@@ -18,7 +18,7 @@
         <input type="file" #filepicker (change)="PickedImage($event)">
       </div>
 
-      <div class="image-preview" *ngIf="Pickedimage && Pickedimage !== ''">
+      <div class="image-preview" *ngIf="Pickedimage !== '' && Pickedimage && form.get('image')?.valid">
         <img [src]="Pickedimage" [alt]="form.value.title" >
       </div>
 

@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import { mimetype } from "./mime-type.validator";
 
 @Component({
   selector: 'app-post-create',
@@ -34,7 +35,10 @@ export class PostCreateComponent implements OnInit {
     this.form = new FormGroup({
       title: new FormControl(null, { validators: [Validators.required, Validators.minLength(3)] }),
       content: new FormControl(null, { validators: [Validators.required] }),
-      image: new FormControl(null, { validators: [Validators.required] })
+      image: new FormControl(null, {
+        validators: [Validators.required],
+        asyncValidators: [mimetype]
+      })
     });
 
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
