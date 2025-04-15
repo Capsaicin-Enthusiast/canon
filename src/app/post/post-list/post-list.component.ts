@@ -8,6 +8,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { RouterModule } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-post-list',
@@ -18,8 +19,12 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 })
 export class PostListComponent implements OnInit, OnDestroy {
 
-  posts: Post[] = [];
+  totalposts = 10;
+  postperpage = 2;
+  currentpage = 1;
+  pageSizeOption = [1, 2, 5, 10];
   loading = false;
+  posts: Post[] = [];
   private postsSub: Subscription = new Subscription();
 
   constructor(public postsService: PostsService) {
@@ -27,12 +32,13 @@ export class PostListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loading = true;
+    this.postsService.getPosts(this.postperpage, this.currentpage);
     this.postsSub = this.postsService.getPostUpdatedListener()
       .subscribe((posts: Post[]) => {
         this.loading = false;
         this.posts = posts;
       });
-    this.postsService.getPosts();
+    this.postsService.getPosts(this.postperpage, 1);
   }
 
   ngOnDestroy() {
@@ -41,5 +47,12 @@ export class PostListComponent implements OnInit, OnDestroy {
 
   onDelete(postId: string) {
     this.postsService.deletePost(postId);
+  }
+
+  onChangedPage(pageData: PageEvent) {
+    this.loading = true;
+    this.currentpage = pageData.pageIndex + 1;
+    this.postperpage = pageData.pageSize;
+    this.postsService.getPosts(this.postperpage, this.currentpage);
   }
 }
