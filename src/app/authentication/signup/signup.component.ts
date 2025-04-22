@@ -17,7 +17,7 @@ export class SignupComponent {
   password: string = '';
   Loading: boolean = false;
 
-  onSignup(signupForm: NgForm) {
-    console.log(signupForm.value);
+  onSignup(form: NgForm) {
+    console.log(form.value);
   }
 }
