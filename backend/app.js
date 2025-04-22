@@ -33,6 +33,6 @@ app.use(
 );
 
 app.use("/api/posts", postroutes);
-app.use("/api/user", userRoutes);
+app.use("/api/users", userRoutes);
 
 module.exports = app;

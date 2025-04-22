@@ -1,5 +1,5 @@
-<mat-card class="login-card">
-  <h1>Login</h1>
+<mat-card class="signup-card">
+  <h1>Signup</h1>
   <form (submit)="onSignup(signupform)" #signupform="ngForm" *ngIf="!Loading">
     <mat-form-field appearance="fill">
       <input
@@ -19,6 +19,6 @@
       <mat-error *ngIf="passwordInput.invalid">Please enter a valid password</mat-error>
     </mat-form-field>
 
-    <button mat-raised-button color="primary" type="submit">Login</button>
+    <button mat-raised-button color="primary" type="submit">Signup</button>
   </form>
 </mat-card>

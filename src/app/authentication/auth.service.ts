@@ -7,13 +7,31 @@ import { AuthData } from './auth-data.model';
 })
 export class AuthService {
   private readonly baseUrl = 'http://localhost:3000/api/users';
+  private token: string | undefined;
 
   constructor(private readonly http: HttpClient) { }
 
   CreateUser(email: string, password: string): void {
     const authData: AuthData = { email, password };
-    this.http.post(`${this.baseUrl}/signup`, authData).subscribe(
-      response => console.log('User created successfully:', response)
-    );
+    this.http.post(`${this.baseUrl}/signup`, authData).subscribe({
+      next: response => console.log('User created successfully:', response),
+      error: error => console.error('Error creating user:', error)
+    });
+  }
+
+  loginUser(email: string, password: string): void {
+    const authData: AuthData = { email, password };
+    this.http.post<{ token: string }>(`${this.baseUrl}/login`, authData).subscribe({
+      next: response => {
+        const token = response.token;
+        this.token = token;
+        console.log('Login successful:', response);
+      },
+      error: error => console.error('Error logging in:', error)
+    });
+  }
+
+  getToken(): string | undefined {
+    return this.token;
   }
 }
