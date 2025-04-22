@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { FormsModule, NgForm } from '@angular/forms';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-signup',
@@ -17,7 +18,12 @@ export class SignupComponent {
   password: string = '';
   Loading: boolean = false;
 
+  constructor(public authService: AuthService) { }
+
   onSignup(form: NgForm) {
-    console.log(form.value);
+    if (form.invalid) {
+      return;
+    }
+    this.authService.CreateUser(form.value.email, form.value.password);
   }
 }
