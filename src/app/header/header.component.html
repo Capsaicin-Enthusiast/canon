@@ -1,13 +1,16 @@
 <mat-toolbar color="primary">
   <span class="app-title">
     <a routerLink="/" class="app-link">
-      Message
+      Test
     </a>
   </span>
   <span class="spacer"></span>
-  <ul class="nav-list">
-    <li class="nav-item">
-      <a mat-button routerLink="/create" routerLinkActive = "mat-accent"> New Post</a>
+  <ul class="nav-list" style="display: flex; list-style: none; margin: 0; padding: 0;">
+    <li class="nav-item" style="margin-right: 10px;">
+      <a mat-button routerLink="/create" routerLinkActive="mat-accent" style="color: white;"> New Post</a>
+    </li>
+    <li class="nav-item" style="margin-right: 10px;">
+      <a mat-button routerLink="login" routerLinkActive="mat-accent" style="color: white;"> Login</a>
     </li>
   </ul>
 </mat-toolbar>

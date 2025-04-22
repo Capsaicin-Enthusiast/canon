@@ -15,5 +15,10 @@ export const routes: Routes = [
     path: 'edit/:postId',
     loadComponent: () =>
       import('./post/post-create/post-create.component').then(m => m.PostCreateComponent)
+  },
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./authentication/login/login.component').then(m => m.LoginComponent)
   }
 ];
