@@ -25,10 +25,21 @@ export class AuthService {
       next: response => {
         const token = response.token;
         this.token = token;
+        localStorage.setItem('token', token);
         console.log('Login successful:', response);
       },
       error: error => console.error('Error logging in:', error)
     });
+  }
+
+  logoutUser(): void {
+    this.token = undefined;
+    localStorage.removeItem('token');
+    console.log('User logged out');
+  }
+
+  isAuthenticated(): boolean {
+    return !!this.getToken();
   }
 
   getToken(): string | undefined {

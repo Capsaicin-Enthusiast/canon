@@ -27,16 +27,25 @@ app.use("/images", express.static(path.join("backend/images")));
 app.use(
   cors({
     origin: "http://localhost:4200",
-    methods: "GET,POST,PUT,DELETE",
-    allowedHeaders: "Content-Type,Authorization",
+    methods: "GET,POST,PUT,DELETE,OPTIONS",
+    allowedHeaders:
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization",
   })
 );
 
 app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+  );
   res.setHeader(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
   );
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
   next();
 });
 
