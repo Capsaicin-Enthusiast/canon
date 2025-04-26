@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { AuthGuard } from './authentication/auth.guard';
 
 export const routes: Routes = [
   {
@@ -8,11 +9,13 @@ export const routes: Routes = [
   },
   {
     path: 'create',
+    canActivate: [AuthGuard],
     loadComponent: () =>
       import('./post/post-create/post-create.component').then(m => m.PostCreateComponent)
   },
   {
     path: 'edit/:postId',
+    canActivate: [AuthGuard],
     loadComponent: () =>
       import('./post/post-create/post-create.component').then(m => m.PostCreateComponent)
   },

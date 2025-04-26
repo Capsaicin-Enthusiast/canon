@@ -5,11 +5,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { FormsModule, NgForm } from '@angular/forms';
 import { AuthService } from '../auth.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatInputModule, MatCardModule, FormsModule],
+  imports: [CommonModule, MatButtonModule, MatInputModule, MatCardModule, FormsModule, MatProgressSpinnerModule],
   providers: [],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
@@ -25,6 +26,7 @@ export class LoginComponent {
     if (form.invalid) {
       return;
     }
+    this.Loading = true;
     this.authservice.loginUser(form.value.email, form.value.password);
   }
 }

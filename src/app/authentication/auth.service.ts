@@ -3,6 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { AuthData } from './auth-data.model';
 import { Subject } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,8 @@ export class AuthService {
 
   constructor(
     private readonly http: HttpClient,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private router: Router
   ) {
     if (isPlatformBrowser(this.platformId)) {
       const storedToken = localStorage.getItem('token');
@@ -47,6 +49,7 @@ export class AuthService {
             localStorage.setItem('token', token);
           }
           this.authStatusListener.next(true);
+          this.router.navigate(['/']);
         }
         console.log('Login successful:', response);
       },
@@ -62,6 +65,7 @@ export class AuthService {
     }
     this.authStatusListener.next(false);
     console.log('User logged out');
+    this.router.navigate(['/']);
   }
 
   getAuthStatusListener() {
