@@ -1,24 +1,20 @@
-<mat-card class="signup-card">
-  <h1>Signup</h1>
-  <form (submit)="onSignup(signupform)" #signupform="ngForm" *ngIf="!Loading">
-    <mat-form-field appearance="fill">
-      <input
-        matInput
-        name="email"
-        ngModel
-        type="email"
-        placeholder="Email Id"
-        #emailInput="ngModel"
-        required
-        email>
-      <mat-error *ngIf="emailInput.invalid">Please enter a valid email id</mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="fill">
-      <input type="password" name="password" matInput placeholder="Password" #passwordInput="ngModel" ngModel required>
-      <mat-error *ngIf="passwordInput.invalid">Please enter a valid password</mat-error>
-    </mat-form-field>
-
-    <button mat-raised-button color="primary" type="submit">Signup</button>
-  </form>
-</mat-card>
+<ng-container *ngIf="!authService.getIsAuth(); else alreadySignedUp">
+  <mat-card class="signup-card">
+    <h1>Signup</h1>
+    <form (submit)="onSignup(signupForm)" #signupForm="ngForm" *ngIf="!Loading">
+      <mat-form-field appearance="fill">
+        <input matInput name="email" ngModel type="email" placeholder="Email" required email>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <input matInput name="password" ngModel type="password" placeholder="Password" required>
+      </mat-form-field>
+      <button mat-raised-button color="primary" type="submit">Signup</button>
+    </form>
+  </mat-card>
+</ng-container>
+<ng-template #alreadySignedUp>
+  <mat-card class="signup-card">
+    <p>You are already signed in.</p>
+    <button mat-raised-button color="primary" routerLink="/">Go to posts</button>
+  </mat-card>
+</ng-template>
