@@ -8,7 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:test": "node dist/test/server/server.mjs",
-    "start:server": "nodemon server.js"
+    "dev": "nodemon server.js"
   },
   "private": true,
   "dependencies": {

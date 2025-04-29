@@ -23,13 +23,15 @@ export class PostsService {
               title: post.title,
               content: post.content,
               id: post._id,
-              imagePath: post.imagePath || null
+              imagePath: post.imagePath || null,
+              creator: post.creator
             };
           }),
           maxPosts: postData.maxPosts
         };
       }))
       .subscribe((transformedPostsData) => {
+        console.log(transformedPostsData);
         this.posts = transformedPostsData.posts;
         this.postUpdated.next({ posts: [...this.posts], postCount: transformedPostsData.maxPosts });
       });
@@ -40,14 +42,15 @@ export class PostsService {
   }
 
   getPost(id: string): Observable<Post> {
-    return this.http.get<{ _id: string, title: string, content: string, imagePath: string }>(
+    return this.http.get<{ _id: string, title: string, content: string, imagePath: string, creator: string }>(
       "http://localhost:3000/api/posts/" + id
     ).pipe(map(postData => {
       return {
         id: postData._id,
         title: postData.title,
         content: postData.content,
-        imagePath: postData.imagePath
+        imagePath: postData.imagePath,
+        creator: postData.creator
       } as Post;
     }));
   }
@@ -59,7 +62,7 @@ export class PostsService {
     postData.append("image", image, title);
     return this.http.post<{ message: string, postId: string }>('http://localhost:3000/api/posts', postData)
       .pipe(map((responseData) => {
-        const post: Post = { id: responseData.postId, title: title, content: content, imagePath: '' };
+        const post: Post = { id: responseData.postId, title: title, content: content, imagePath: '', creator: '' };
         this.posts.push(post);
         this.postUpdated.next({ posts: [...this.posts], postCount: this.posts.length });
       }));
@@ -78,12 +81,13 @@ export class PostsService {
         id: id,
         title: title,
         content: content,
-        imagePath: image
+        imagePath: image,
+        creator: ''
       };
     }
     return this.http.put("http://localhost:3000/api/posts/" + id, postData)
       .pipe(map(() => {
-        const updatedPost: Post = { id: id, title: title, content: content, imagePath: typeof image === 'string' ? image : '' };
+        const updatedPost: Post = { id: id, title: title, content: content, imagePath: typeof image === 'string' ? image : '', creator: '' };
         const updatedPosts = [...this.posts];
         const oldPostIndex = updatedPosts.findIndex(p => p.id === id);
         updatedPosts[oldPostIndex] = updatedPost;

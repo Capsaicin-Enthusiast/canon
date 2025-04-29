@@ -13,20 +13,43 @@ export class AuthService {
   private isAuthenticated = false;
   private readonly baseUrl = 'http://localhost:3000/api/users';
   private token: string | undefined;
+  private tokenTimer: any;
 
   constructor(
     private readonly http: HttpClient,
     @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router
   ) {
+    this.autoAuthUser();
+  }
+
+  private getAuthData(): { token: string; expirationDate: Date } | undefined {
     if (isPlatformBrowser(this.platformId)) {
-      const storedToken = localStorage.getItem('token');
-      if (storedToken) {
-        this.token = storedToken;
-        this.isAuthenticated = true;
+      const token = localStorage.getItem('token');
+      const expirationDateString = localStorage.getItem('expiration');
+      if (!token || !expirationDateString) {
+        return;
       }
+      return { token, expirationDate: new Date(expirationDateString) };
     }
-    this.authStatusListener.next(this.isAuthenticated);
+    return;
+  }
+
+  public autoAuthUser(): void {
+    const authInformation = this.getAuthData();
+    if (!authInformation) {
+      return;
+    }
+    const now = new Date();
+    const expiresInDuration = authInformation.expirationDate.getTime() - now.getTime();
+    if (expiresInDuration > 0) {
+      this.token = authInformation.token;
+      this.isAuthenticated = true;
+      this.setAuthTimer(expiresInDuration / 1000);
+      this.authStatusListener.next(true);
+    } else {
+      this.clearAuthData();
+    }
   }
 
   CreateUser(email: string, password: string): void {
@@ -37,16 +60,20 @@ export class AuthService {
     });
   }
 
-  loginUser(email: string, password: string): void {
+  public login(email: string, password: string): void {
     const authData: AuthData = { email, password };
-    this.http.post<{ token: string }>(`${this.baseUrl}/login`, authData).subscribe({
+    this.http.post<{ token: string; expiresIn: number }>(`${this.baseUrl}/login`, authData).subscribe({
       next: response => {
         const token = response.token;
+        const expiresInDuration = response.expiresIn;
         if (token) {
+          this.setAuthTimer(expiresInDuration / 1000);
           this.token = token;
           this.isAuthenticated = true;
           if (isPlatformBrowser(this.platformId)) {
-            localStorage.setItem('token', token);
+            const now = new Date();
+            const expirationDate = new Date(now.getTime() + expiresInDuration * 1000);
+            this.saveAuthData(token, expirationDate);
           }
           this.authStatusListener.next(true);
           this.router.navigate(['/']);
@@ -57,15 +84,34 @@ export class AuthService {
     });
   }
 
-  logoutUser(): void {
+  private saveAuthData(token: string, expirationDate: Date): void {
+    localStorage.setItem('token', token);
+    localStorage.setItem('expiration', expirationDate.toISOString());
+  }
+
+  public logout(): void {
+    this.clearAuthData();
+    if (this.tokenTimer) {
+      clearTimeout(this.tokenTimer);
+    }
     this.token = undefined;
     this.isAuthenticated = false;
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.removeItem('token');
-    }
     this.authStatusListener.next(false);
     console.log('User logged out');
     this.router.navigate(['/']);
+  }
+
+  private setAuthTimer(duration: number): void {
+    this.tokenTimer = setTimeout(() => {
+      this.logout();
+    }, duration * 1000);
+  }
+
+  private clearAuthData(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('expiration');
+    }
   }
 
   getAuthStatusListener() {
