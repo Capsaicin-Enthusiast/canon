@@ -48,17 +48,19 @@ export class PostCreateComponent implements OnInit {
         this.loading = true;
         this.postsService.getPost(this.postId!).subscribe(postData => {
           this.loading = false;
-          this.post = {
+          const fetchedPost: Post = {
             id: postData.id,
             title: postData.title,
             content: postData.content,
             imagePath: postData.imagePath,
-          },
-            this.form.setValue({
-              title: this.post.title,
-              content: this.post.content,
-              image: this.post.imagePath
-            });
+            creator: postData.creator
+          };
+          this.post = fetchedPost;
+          this.form.setValue({
+            title: fetchedPost.title,
+            content: fetchedPost.content,
+            image: fetchedPost.imagePath
+          });
         });
       } else {
         this.mode = 'create';

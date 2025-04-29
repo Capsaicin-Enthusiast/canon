@@ -20,6 +20,7 @@ import { PageEvent } from '@angular/material/paginator';
 })
 export class PostListComponent implements OnInit, OnDestroy {
   public userIsAuthenticated = false;
+  public userId: string | undefined;
   totalposts = 0;
   postperpage = 2;
   currentpage = 1;
@@ -46,9 +47,11 @@ export class PostListComponent implements OnInit, OnDestroy {
     this.postsService.getPosts(this.postperpage, 1);
 
     this.userIsAuthenticated = this.authService.getIsAuth();
+    this.userId = this.authService.getUserId();
     this.authStatusSub = this.authService.getAuthStatusListener()
       .subscribe(isAuthenticated => {
         this.userIsAuthenticated = isAuthenticated;
+        this.userId = this.authService.getUserId();
       });
   }
 
