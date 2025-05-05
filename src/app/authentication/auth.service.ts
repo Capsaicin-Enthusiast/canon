@@ -55,12 +55,9 @@ export class AuthService {
     }
   }
 
-  CreateUser(email: string, password: string): void {
+  public CreateUser(email: string, password: string) {
     const authData: AuthData = { email, password };
-    this.http.post(`${this.baseUrl}/signup`, authData).subscribe({
-      next: response => console.log('User created successfully:', response),
-      error: error => console.error('Error creating user:', error)
-    });
+    return this.http.post(`${this.baseUrl}/signup`, authData);
   }
 
   public login(email: string, password: string): void {
@@ -71,7 +68,7 @@ export class AuthService {
         const expiresInDuration = response.expiresIn;
         this.userId = response.userId;
         if (token) {
-          this.setAuthTimer(expiresInDuration / 1000);
+          this.setAuthTimer(expiresInDuration);
           this.token = token;
           this.isAuthenticated = true;
           if (isPlatformBrowser(this.platformId)) {
