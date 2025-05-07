@@ -3,22 +3,31 @@
     <mat-card-header>
       <mat-card-title>Create Post</mat-card-title>
     </mat-card-header>
-    <form (submit)="onAddPost(postForm)" #postForm="ngForm">
+
+    <mat-spinner *ngIf="loading" class="loading-spinner"></mat-spinner>
+    <form [formGroup]="form" (ngSubmit)="onSavePost()" *ngIf="!loading">
       <mat-form-field>
-        <input matInput name="title" ngModel required #title="ngModel" minlength="5"
-          placeholder="Title">
-        <mat-error *ngIf="title.invalid">
-          Enter a title
-        </mat-error>
+        <input matInput type="text" formControlName="title" placeholder="Enter Title Here">
+        <mat-error *ngIf="form.get('title')?.invalid">This field is required</mat-error>
       </mat-form-field>
+
+      <div>
+        <button mat-stroked-button type="button" (click)="filepicker.click()">
+          Pick Image
+        </button>
+        <input type="file" #filepicker (change)="PickedImage($event)">
+      </div>
+
+      <div class="image-preview" *ngIf="Pickedimage !== '' && Pickedimage && form.get('image')?.valid">
+        <img [src]="Pickedimage" [alt]="form.value.title" >
+      </div>
+
       <mat-form-field>
-        <textarea rows="6" matInput name="content" ngModel="" minlength="10" required #content="ngModel" 
-          placeholder="Content"> </textarea>
-        <mat-error *ngIf="content.invalid">
-          Enter content
-        </mat-error>
+        <textarea matInput rows="6" formControlName="content" placeholder="Enter Content Here"></textarea>
+        <mat-error *ngIf="form.get('content')?.invalid">This field is required</mat-error>
       </mat-form-field>
-      <button mat-raised-button color="primary" type="submit">Save</button>
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Save</button>
     </form>
   </mat-card>
 </div>

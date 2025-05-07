@@ -1,6 +1,9 @@
 <app-header></app-header>
 
-<main>
-  <app-post-create></app-post-create>
-  <post-list></post-list>
+<main class="container">
+  <router-outlet></router-outlet>
 </main>
+
+<ng-container *ngIf="false">
+  <ng-container *ngComponentOutlet="ErrorComponent"></ng-container>
+</ng-container>

@@ -2,7 +2,9 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const Post = require("./model/post");
+const path = require("path");
+const postroutes = require("./routes/posts");
+const userRoutes = require("./routes/users");
 
 const app = express();
 
@@ -19,62 +21,35 @@ mongoose
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use("/images", express.static(path.join("backend/images")));
+
 app.use(
   cors({
     origin: "http://localhost:4200",
-    methods: "GET,POST,PUT,DELETE",
-    allowedHeaders: "Content-Type,Authorization",
+    methods: "GET,POST,PUT,DELETE,OPTIONS",
+    allowedHeaders:
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization",
   })
 );
 
-let posts = [
-  {
-    id: "sdadadasda",
-    title: "1st server-side post",
-    content: "1st content from server-side",
-  },
-  {
-    id: "fgdfsfdfs",
-    title: "2nd server-side post",
-    content: "2nd content from server-side",
-  },
-  {
-    id: "dfsdfgfghg",
-    title: "3rd server-side post",
-    content: "3rd content from server-side",
-  },
-];
-
-app.get("/api/posts", (req, res, next) => {
-  res.status(200).json({
-    message: "Posts fetched successfully!",
-    posts: posts,
-  });
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
 });
 
-app.post("/api/posts", (req, res, next) => {
-  const post = new Post({
-    title: req.body.title,
-    content: req.body.content,
-  });
-  post.save().then((createdPost) => {
-    res.status(201).json({
-      message: "Post added successfully!",
-    });
-  });
-});
-
-app.put("/api/posts/:id", (req, res, next) => {
-  const updatedPost = req.body;
-  const postId = req.params.id;
-  posts = posts.map((post) => (post.id === postId ? updatedPost : post));
-  res.status(200).json({ message: "Post updated successfully!" });
-});
-
-app.delete("/api/posts/:id", (req, res, next) => {
-  const postId = req.params.id;
-  posts = posts.filter((post) => post.id !== postId);
-  res.status(200).json({ message: "Post deleted successfully!" });
-});
+app.use("/api/posts", postroutes);
+app.use("/api/users", userRoutes);
 
 module.exports = app;

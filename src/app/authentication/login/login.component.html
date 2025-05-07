@@ -1,0 +1,33 @@
+<ng-container *ngIf="!authservice.getIsAuth(); else alreadyLogged">
+  <mat-card class="login-card">
+    <h1>Login</h1>
+    <form (submit)="onLogin(loginform)" #loginform="ngForm">
+      <mat-form-field appearance="fill">
+        <input
+          matInput
+          name="email"
+          ngModel
+          type="email"
+          placeholder="Email Id"
+          #emailInput="ngModel"
+          required
+          email>
+        <mat-error *ngIf="emailInput.invalid">Please enter a valid email id</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <input type="password" name="password" matInput placeholder="Password" #passwordInput="ngModel" ngModel required>
+        <mat-error *ngIf="passwordInput.invalid">Please enter a valid password</mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" *ngIf="!Loading">Login</button>
+      <mat-spinner *ngIf="Loading" diameter="40" style="margin: 16px auto; display: block;"></mat-spinner>
+    </form>
+  </mat-card>
+</ng-container>
+<ng-template #alreadyLogged>
+  <mat-card class="login-card">
+    <p>You are already logged in.</p>
+    <button mat-raised-button color="primary" routerLink="/" >Go to posts</button>
+  </mat-card>
+</ng-template>
