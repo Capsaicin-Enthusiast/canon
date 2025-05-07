@@ -6,6 +6,8 @@ import { MatCardModule } from '@angular/material/card';
 import { FormsModule, NgForm } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Router } from '@angular/router';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -20,13 +22,18 @@ export class LoginComponent {
   password: string = '';
   Loading: boolean = false;
 
-  constructor(public authservice: AuthService) { }
+  constructor(public authservice: AuthService, private router: Router) { }
 
   onLogin(form: NgForm) {
     if (form.invalid) {
       return;
     }
     this.Loading = true;
-    this.authservice.login(form.value.email, form.value.password);
+    this.authservice.login(form.value.email, form.value.password)
+      .pipe(finalize(() => this.Loading = false))
+      .subscribe({
+        next: () => this.router.navigate(['/']),
+        error: () => { }
+      });
   }
 }

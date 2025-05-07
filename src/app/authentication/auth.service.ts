@@ -2,7 +2,8 @@ import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { AuthData } from './auth-data.model';
-import { Subject } from 'rxjs';
+import { Subject, throwError } from 'rxjs';
+import { tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -55,34 +56,37 @@ export class AuthService {
     }
   }
 
-  public CreateUser(email: string, password: string) {
+  public signUp(email: string, password: string) {
     const authData: AuthData = { email, password };
-    return this.http.post(`${this.baseUrl}/signup`, authData);
+    return this.http.post<void>(`${this.baseUrl}/signup`, authData);
   }
 
-  public login(email: string, password: string): void {
+  public login(email: string, password: string) {
     const authData: AuthData = { email, password };
-    this.http.post<{ token: string; expiresIn: number; userId: string }>(`${this.baseUrl}/login`, authData).subscribe({
-      next: response => {
-        const token = response.token;
-        const expiresInDuration = response.expiresIn;
-        this.userId = response.userId;
-        if (token) {
-          this.setAuthTimer(expiresInDuration);
-          this.token = token;
-          this.isAuthenticated = true;
-          if (isPlatformBrowser(this.platformId)) {
-            const now = new Date();
-            const expirationDate = new Date(now.getTime() + expiresInDuration * 1000);
-            this.saveAuthData(token, expirationDate, this.userId);
+    return this.http
+      .post<{ token: string; expiresIn: number; userId: string }>(`${this.baseUrl}/login`, authData)
+      .pipe(
+        tap(response => {
+          const token = response.token;
+          const expiresInDuration = response.expiresIn;
+          this.userId = response.userId;
+          if (token) {
+            this.setAuthTimer(expiresInDuration);
+            this.token = token;
+            this.isAuthenticated = true;
+            if (isPlatformBrowser(this.platformId)) {
+              const now = new Date();
+              const expirationDate = new Date(now.getTime() + expiresInDuration * 1000);
+              this.saveAuthData(token, expirationDate, this.userId);
+            }
+            this.authStatusListener.next(true);
           }
-          this.authStatusListener.next(true);
-          this.router.navigate(['/']);
-        }
-        console.log('Login successful:', response);
-      },
-      error: error => console.error('Error logging in:', error)
-    });
+        }),
+        catchError(error => {
+          this.authStatusListener.next(false);
+          return throwError(() => error);
+        })
+      );
   }
 
   private saveAuthData(token: string, expirationDate: Date, userId: string): void {

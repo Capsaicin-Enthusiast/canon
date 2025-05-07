@@ -21,9 +21,11 @@ router.post("/signup", (req, res, next) => {
     })
     .catch((error) => {
       console.error("Error:", error);
-      res.status(500).json({
-        error: error,
-      });
+      if (error.name === "ValidationError") {
+        const firstError = Object.values(error.errors)[0];
+        return res.status(400).json({ message: firstError.message });
+      }
+      return res.status(500).json({ message: "Internal server error." });
     });
 });
 
@@ -33,14 +35,18 @@ router.post("/login", (req, res, next) => {
     .findOne({ email: req.body.email })
     .then((user) => {
       if (!user) {
-        return res.status(401).json({ message: "Authentication failed!" });
+        return res
+          .status(401)
+          .json({ message: "Invalid Authentication Credentials!" });
       }
       fetchedUser = user;
       return bcrypt.compare(req.body.password, user.password);
     })
     .then((result) => {
       if (!result) {
-        return res.status(401).json({ message: "Auth failed" });
+        return res
+          .status(401)
+          .json({ message: "Invalid Authentication Credentials!" });
       }
       const token = jwt.sign(
         { email: fetchedUser.email, userId: fetchedUser._id },
@@ -55,9 +61,9 @@ router.post("/login", (req, res, next) => {
     })
     .catch((err) => {
       console.error("Error:", err);
-      return res.status(401).json({
-        message: "Auth failed",
-      });
+      return res
+        .status(401)
+        .json({ message: "Invalid Authentication Credentials!" });
     });
 });
 

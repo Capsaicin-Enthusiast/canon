@@ -27,7 +27,7 @@ export class SignupComponent {
       return;
     }
     this.Loading = true;
-    this.authService.CreateUser(form.value.email, form.value.password).subscribe({
+    this.authService.signUp(form.value.email, form.value.password).subscribe({
       next: () => {
         this.Loading = false;
         this.router.navigate(['/login']);
