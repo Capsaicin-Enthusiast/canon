@@ -8,3 +8,15 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+body.dark-mode {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+body.dark-mode .mat-toolbar {
+  background-color: #333333 !important;
+}
+
+body,
+.mat-toolbar {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}

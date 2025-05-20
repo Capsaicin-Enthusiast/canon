@@ -1,4 +1,13 @@
 <div>
+  <div class="search-bar">
+    <mat-form-field appearance="outline">
+      <mat-label>Search by title</mat-label>
+      <input matInput [(ngModel)]="filterTitle" (keyup.enter)="onSearch()">
+      <button mat-icon-button matSuffix (click)="onSearch()">
+        <mat-icon>search</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
   <mat-spinner *ngIf="loading" class="loading-spinner"></mat-spinner>
   <p *ngIf="posts.length === 0 && loading" class="info-text">No posts added yet!</p>
   <mat-accordion multi="true" *ngIf="posts.length > 0 && !loading">

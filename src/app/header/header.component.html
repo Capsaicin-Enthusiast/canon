@@ -9,6 +9,9 @@
     <li *ngIf="userIsAuthenticated" class="nav-item" style="margin-right: 10px;">
       <a mat-button routerLink="/create" style="color: white;"> New Post</a>
     </li>
+    <li *ngIf="userIsAuthenticated" class="nav-item" style="margin-right: 10px;">
+      <a mat-button routerLink="/profile" style="color: white;"> Profile</a>
+    </li>
     <li *ngIf="!userIsAuthenticated" class="nav-item" style="margin-right: 10px;">
       <a mat-button routerLink="/login" style="color: white;"> Login</a>
     </li>
@@ -19,4 +22,7 @@
       <button mat-button (click)="onLogout()" style="color: white;"> Logout</button>
     </li>
   </ul>
+  <button mat-icon-button (click)="toggleTheme()" style="color: white;">
+    <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
+  </button>
 </mat-toolbar>

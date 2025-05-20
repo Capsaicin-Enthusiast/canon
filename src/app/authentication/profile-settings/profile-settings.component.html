@@ -1,0 +1,20 @@
+<div class="profile-settings-wrapper">
+  <mat-card class="password-card">
+    <h2>Change Password</h2>
+    <form #pwForm="ngForm" (ngSubmit)="onChangePassword(pwForm)">
+      <mat-form-field appearance="fill">
+        <input matInput name="oldPassword" [(ngModel)]="oldPassword"
+               type="password" placeholder="Old Password" required>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <input matInput name="newPassword" [(ngModel)]="newPassword"
+               type="password" placeholder="New Password" required>
+      </mat-form-field>
+      <button mat-raised-button color="primary" type="submit">
+        Change Password
+      </button>
+    </form>
+    <p *ngIf="pwSuccess" class="success">{{ pwSuccess }}</p>
+    <p *ngIf="pwError" class="error">{{ pwError }}</p>
+  </mat-card>
+</div>

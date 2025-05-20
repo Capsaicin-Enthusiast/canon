@@ -90,9 +90,13 @@ router.put(
 router.get("", (req, res, next) => {
   const PageSize = +req.query.pagesize;
   const CurrentPage = +req.query.page;
-  const postquery = Post.find();
-  let fetchedPosts;
+  const titleFilter = req.query.title;
+  const filter = titleFilter
+    ? { title: { $regex: titleFilter, $options: "i" } }
+    : {};
+  const postquery = Post.find(filter);
 
+  let fetchedPosts;
   if (PageSize && CurrentPage) {
     postquery.skip(PageSize * (CurrentPage - 1)).limit(PageSize);
   }
@@ -100,7 +104,7 @@ router.get("", (req, res, next) => {
   postquery
     .then((documents) => {
       fetchedPosts = documents;
-      return Post.countDocuments();
+      return Post.countDocuments(filter);
     })
     .then((count) => {
       res.status(200).json({
