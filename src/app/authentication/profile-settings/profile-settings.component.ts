@@ -10,6 +10,7 @@ import { AuthService } from '../auth.service';
 @Component({
   selector: 'app-profile-settings',
   standalone: true,
+  styleUrls: ['./profile-settings.component.css'],
   imports: [
     CommonModule,
     FormsModule,
