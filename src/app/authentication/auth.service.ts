@@ -137,4 +137,12 @@ export class AuthService {
   getUserId(): string | undefined {
     return this.userId;
   }
+
+  public updatePassword(oldPassword: string, newPassword: string) {
+    return this.http.patch<{ message: string }>(
+      `${this.baseUrl}/update-password`,
+      { oldPassword, newPassword }
+    );
+  }
+
 }

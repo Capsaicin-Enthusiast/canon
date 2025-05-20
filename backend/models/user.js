@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
+const bcrypt = require("bcrypt");
 
 const userSchema = mongoose.Schema({
   email: { type: String, required: true, unique: true },
@@ -8,4 +9,8 @@ const userSchema = mongoose.Schema({
 
 userSchema.plugin(uniqueValidator, { message: "Email already exists!" });
 
-module.exports = mongoose.model("user", userSchema);
+userSchema.methods.comparePassword = function (candidatePassword) {
+  return bcrypt.compare(candidatePassword, this.password);
+};
+
+module.exports = mongoose.model("User", userSchema);
