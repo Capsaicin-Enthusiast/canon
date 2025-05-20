@@ -28,5 +28,12 @@ export const routes: Routes = [
     path: 'signup',
     loadComponent: () =>
       import('./authentication/signup/signup.component').then(m => m.SignupComponent)
+  },
+  {
+    path: 'profile',
+    canActivate: [AuthGuard],
+    loadComponent: () =>
+      import('./authentication/profile-settings/profile-settings.component')
+        .then(m => m.ProfileSettingsComponent)
   }
 ];

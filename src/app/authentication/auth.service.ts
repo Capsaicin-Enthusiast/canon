@@ -145,4 +145,11 @@ export class AuthService {
     );
   }
 
+  public updateProfile(firstName: string, lastName: string) {
+    return this.http.patch<{
+      message: string;
+      user: { firstName: string; lastName: string; email: string };
+    }>(`${this.baseUrl}/update-profile`, { firstName, lastName });
+  }
+
 }

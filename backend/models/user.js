@@ -5,6 +5,8 @@ const bcrypt = require("bcrypt");
 const userSchema = mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  firstName: { type: String, default: "" },
+  lastName: { type: String, default: "" },
 });
 
 userSchema.plugin(uniqueValidator, { message: "Email already exists!" });

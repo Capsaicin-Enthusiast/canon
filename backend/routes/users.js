@@ -12,6 +12,8 @@ router.post("/signup", (req, res, next) => {
       const NewUser = new user({
         email: req.body.email,
         password: hash,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
       });
       return NewUser.save();
     })
@@ -70,19 +72,16 @@ router.post("/login", (req, res, next) => {
 
 router.patch("/update-password", checkAuth, (req, res, next) => {
   const { oldPassword, newPassword } = req.body;
-  // find current user
   user
     .findById(req.userData.userId)
     .then((u) => {
       if (!u) {
         return res.status(404).json({ message: "User not found" });
       }
-      // verify old password
       return u.comparePassword(oldPassword).then((match) => {
         if (!match) {
           return res.status(401).json({ message: "Old password is incorrect" });
         }
-        // hash and save new password
         return bcrypt.hash(newPassword, 10).then((hash) => {
           u.password = hash;
           return u.save().then(() => {
@@ -94,6 +93,34 @@ router.patch("/update-password", checkAuth, (req, res, next) => {
     .catch((err) => {
       console.error(err);
       res.status(500).json({ message: "Password update failed" });
+    });
+});
+
+router.patch("/update-profile", checkAuth, (req, res, next) => {
+  const { firstName, lastName } = req.body;
+  user
+    .findById(req.userData.userId)
+    .then((u) => {
+      if (!u) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      u.firstName = firstName;
+      u.lastName = lastName;
+      return u.save();
+    })
+    .then((updated) => {
+      res.status(200).json({
+        message: "Profile updated",
+        user: {
+          firstName: updated.firstName,
+          lastName: updated.lastName,
+          email: updated.email,
+        },
+      });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({ message: "Profile update failed" });
     });
 });
 
